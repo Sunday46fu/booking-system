@@ -15,7 +15,7 @@ export default function handler(req, res) {
         
         // ข้อมูลของพี่
         const TOKEN = 'LQNwHAxoHm4bMDXxl8qqDD0NnOdfjztKFDulaY2ExHn3bTQSr/A8jujYjHVM4XDpWwB/zN43ATmJSU8ne+vj+RqMTb1iq0qy94ldu60t/Cljv3D4FstkthEcbS0aSASwJxzOlBSW7VZEbQ78kPvGQQdB04t89/1O/w1cDnyilFU=';
-        const MY_USER_ID = 'U45e317046162394602c619e078736a61'; // ผมดึงจากข้อมูลที่พี่ให้ไว้
+        const MY_USER_ID = 'U4a37f843e844b28997a8941a4515d13b'; // ผมดึงจากข้อมูลที่พี่ให้ไว้
 
         const data = JSON.stringify({
             to: MY_USER_ID,
