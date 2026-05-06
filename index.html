@@ -3,51 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจองคิว LIFF</title>
-    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <title>ระบบจองคิวของพี่</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        button { padding: 15px 30px; font-size: 18px; cursor: pointer; background: #00b900; color: white; border: none; border-radius: 5px; }
+    </style>
 </head>
 <body>
-    <h2 id="userName">กำลังโหลดข้อมูล...</h2>
-    <div id="bookingForm" style="display:none;">
-        <p>เลือกแพ็กเกจ:</p>
-        <select id="package">
-            <option value="ล้างรถเทพ">ล้างรถเทพ</option>
-            <option value="เคลือบแก้ว">เคลือบแก้ว</option>
-        </select>
-        <p>เลือกเวลาจอง:</p>
-        <input type="datetime-local" id="bookingTime">
-        <br><br>
-        <button onclick="reserve()">ยืนยันการจอง</button>
-    </div>
+    <h1>จองคิวล้างรถ</h1>
+    <p>เลือกแพ็กเกจแล้วกดปุ่มด้านล่าง</p>
+    
+    <select id="package">
+        <option value="ล้างสี ดูดฝุ่น">ล้างสี ดูดฝุ่น</option>
+        <option value="เคลือบแก้ว">เคลือบแก้ว</option>
+    </select>
+    <br><br>
+    
+    <button onclick="sendData()">กดจองคิว (ส่งเข้า LINE)</button>
 
     <script>
-        async function main() {
-            await liff.init({ liffId: "2009974431-rZ9Od5w1" });
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            } else {
-                const profile = await liff.getProfile();
-                document.getElementById('userName').innerText = "สวัสดีคุณ " + profile.displayName;
-                document.getElementById('bookingForm').style.display = "block";
-                window.userId = profile.userId; // เก็บ ID ไว้ส่งไปหลังบ้าน
-            }
-        }
-        main();
-
-        async function reserve() {
+        async function sendData() {
             const pkg = document.getElementById('package').value;
-            const time = document.getElementById('bookingTime').value;
+            const time = new Date().toLocaleString('th-TH');
 
-            const res = await fetch('/api', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: window.userId,
-                    package: pkg,
-                    time: time
-                })
-            });
-            if (res.ok) alert('จองสำเร็จ! ระบบจะแจ้งเตือนเมื่อถึงเวลา');
+            try {
+                // ยิงไปที่ /api ของตัวเอง (ไม่ต้องใส่ URL เต็มก็ได้ถ้าอยู่ในที่เดียวกัน)
+                const response = await fetch('/api', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ package: pkg, time: time })
+                });
+
+                if (response.ok) {
+                    alert('✅ ส่งข้อมูลเข้า LINE เรียบร้อย!');
+                } else {
+                    alert('❌ เกิดข้อผิดพลาด');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('❌ ติดต่อเซิร์ฟเวอร์ไม่ได้');
+            }
         }
     </script>
 </body>
